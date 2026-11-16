@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>雲端即時投票系統｜結合安全門禁與即時統計</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 頂部導覽列 -->
+  <header class="top-nav">
+    <div class="wrap brand-title">
+      <div>
+        <h1>雲端即時投票系統 <span class="brand-badge">W10 × W11 高級版</span></h1>
+        <p>一人一票資料庫門禁（RLS）防護，即時動態得票統計</p>
+      </div>
+      <div id="auth-status-bar" class="user-bar">
+        <!-- 動態注入登入狀態或按鈕 -->
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- 設定檔未填寫警告 -->
+    <section id="config-warning" class="alert alert-warn" hidden>
+      <strong>連線設定尚未完成：</strong>
+      <span id="config-message"></span>
+      <p style="margin: 0.4rem 0 0;">請開啟 <code>config.js</code>，填入 Supabase 的 Project URL 與 Publishable key 後重新整理。</p>
+    </section>
+
+    <!-- 身分驗證區塊（登入 / 註冊） -->
+    <section id="auth-panel" class="card" hidden>
+      <div class="card-header">
+        <h2 id="auth-title" class="card-title">會員登入 / 註冊</h2>
+        <button type="button" id="close-auth-btn" class="secondary btn-sm" aria-label="關閉">✕ 關閉</button>
+      </div>
+      <p class="card-desc">依循資料庫 RLS 門禁規範：登入後每人每題嚴格限投一票，可隨時更換或撤回投票。</p>
+      <form id="auth-form">
+        <label for="auth-email">電子郵件（Email）</label>
+        <input id="auth-email" type="email" autocomplete="email" required placeholder="your.name@example.com">
+        <label for="auth-password">練習用密碼（至少 6 碼，切勿使用重要密碼）</label>
+        <input id="auth-password" type="password" autocomplete="current-password" minlength="6" required>
+        <div class="form-row">
+          <button type="submit" id="submit-login">登入</button>
+          <button type="button" id="submit-signup" class="secondary">註冊新帳號</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 發起新投票區塊（僅限登入會員使用） -->
+    <section id="create-poll-panel" class="card" hidden>
+      <div class="card-header">
+        <h2 class="card-title">發起全新投票</h2>
+        <button type="button" id="cancel-create-btn" class="secondary btn-sm">取消</button>
+      </div>
+      <form id="create-poll-form">
+        <label for="new-poll-title">投票標題</label>
+        <input id="new-poll-title" type="text" maxlength="150" required placeholder="例如：期中專案票選或是下週想加強的主題">
+        
+        <label for="new-poll-desc">補充說明（選填）</label>
+        <textarea id="new-poll-desc" rows="2" maxlength="500" placeholder="說明此投票的目的或規則"></textarea>
+
+        <label>投票選項（至少 2 項）</label>
+        <div id="options-inputs" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.6rem;">
+          <input type="text" class="new-opt-input" maxlength="100" required placeholder="選項 1">
+          <input type="text" class="new-opt-input" maxlength="100" required placeholder="選項 2">
+          <input type="text" class="new-opt-input" maxlength="100" placeholder="選項 3（選填）">
+        </div>
+        <button type="button" id="add-more-opt-btn" class="secondary btn-sm" style="margin-bottom: 0.8rem;">＋ 增加選項欄位</button>
+
+        <div class="form-row">
+          <button type="submit" id="save-poll-btn">正式發布投票</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 操控工具列 -->
+    <div class="toolbar">
+      <div class="filter-tabs">
+        <button type="button" class="tab-btn active" data-filter="all">所有投票</button>
+        <button type="button" class="tab-btn" data-filter="my-votes" id="tab-my-votes" hidden>我的投票紀錄</button>
+      </div>
+      <button type="button" id="toggle-create-btn" class="secondary btn-sm" hidden>＋ 發起新投票</button>
+    </div>
+
+    <!-- 投票列表容器 -->
+    <div id="polls-container">
+      <div class="empty-box">載入投票清單中…</div>
+    </div>
+  </main>
+
+  <!-- 浮動提示訊息通知列 -->
+  <div id="system-status" role="status" aria-live="polite"></div>
+
+  <!-- Supabase JS v2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"
+          integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK"
+          crossorigin="anonymous"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
