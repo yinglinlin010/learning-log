@@ -28,11 +28,12 @@
       <p style="margin: 0.4rem 0 0;">請開啟 <code>config.js</code>，填入 Supabase 的 Project URL 與 Publishable key 後重新整理。</p>
     </section>
 
-    <!-- 身分驗證區塊（登入 / 註冊） -->
+    <!-- 身分驗證區塊（未登入時顯示） -->
     <section id="auth-panel" class="card">
       <div class="card-header">
         <h2 id="auth-title" class="card-title">登入或註冊</h2>
       </div>
+      <p class="card-desc">本站採用會員安全門禁（RLS）機制：請先登入或註冊帳號，方可參與投票與查看個人紀錄。</p>
       <form id="auth-form">
         <label for="auth-email">Email</label>
         <input id="auth-email" type="email" autocomplete="email" required placeholder="例如：your.name@example.com">
@@ -45,45 +46,48 @@
       </form>
     </section>
 
-    <!-- 發起新投票區塊（僅限登入會員使用） -->
-    <section id="create-poll-panel" class="card" hidden>
-      <div class="card-header">
-        <h2 class="card-title">發起全新投票</h2>
-        <button type="button" id="cancel-create-btn" class="secondary btn-sm">取消</button>
-      </div>
-      <form id="create-poll-form">
-        <label for="new-poll-title">投票標題</label>
-        <input id="new-poll-title" type="text" maxlength="150" required placeholder="例如：期中專案票選或是下週想加強的主題">
-        
-        <label for="new-poll-desc">補充說明（選填）</label>
-        <textarea id="new-poll-desc" rows="2" maxlength="500" placeholder="說明此投票的目的或規則"></textarea>
-
-        <label>投票選項（至少 2 項）</label>
-        <div id="options-inputs" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.6rem;">
-          <input type="text" class="new-opt-input" maxlength="100" required placeholder="選項 1">
-          <input type="text" class="new-opt-input" maxlength="100" required placeholder="選項 2">
-          <input type="text" class="new-opt-input" maxlength="100" placeholder="選項 3（選填）">
+    <!-- 主要投票應用區塊（登入後才可見） -->
+    <div id="app-view" hidden>
+      <!-- 發起新投票區塊（僅限登入會員使用） -->
+      <section id="create-poll-panel" class="card" hidden>
+        <div class="card-header">
+          <h2 class="card-title">發起全新投票</h2>
+          <button type="button" id="cancel-create-btn" class="secondary btn-sm">取消</button>
         </div>
-        <button type="button" id="add-more-opt-btn" class="secondary btn-sm" style="margin-bottom: 0.8rem;">＋ 增加選項欄位</button>
+        <form id="create-poll-form">
+          <label for="new-poll-title">投票標題</label>
+          <input id="new-poll-title" type="text" maxlength="150" required placeholder="例如：期中專案票選或是下週想加強的主題">
+          
+          <label for="new-poll-desc">補充說明（選填）</label>
+          <textarea id="new-poll-desc" rows="2" maxlength="500" placeholder="說明此投票的目的或規則"></textarea>
 
-        <div class="form-row">
-          <button type="submit" id="save-poll-btn">正式發布投票</button>
+          <label>投票選項（至少 2 項）</label>
+          <div id="options-inputs" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.6rem;">
+            <input type="text" class="new-opt-input" maxlength="100" required placeholder="選項 1">
+            <input type="text" class="new-opt-input" maxlength="100" required placeholder="選項 2">
+            <input type="text" class="new-opt-input" maxlength="100" placeholder="選項 3（選填）">
+          </div>
+          <button type="button" id="add-more-opt-btn" class="secondary btn-sm" style="margin-bottom: 0.8rem;">＋ 增加選項欄位</button>
+
+          <div class="form-row">
+            <button type="submit" id="save-poll-btn">正式發布投票</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 操控工具列 -->
+      <div class="toolbar">
+        <div class="filter-tabs">
+          <button type="button" class="tab-btn active" data-filter="all">所有投票</button>
+          <button type="button" class="tab-btn" data-filter="my-votes" id="tab-my-votes" hidden>我的投票紀錄</button>
         </div>
-      </form>
-    </section>
-
-    <!-- 操控工具列 -->
-    <div class="toolbar">
-      <div class="filter-tabs">
-        <button type="button" class="tab-btn active" data-filter="all">所有投票</button>
-        <button type="button" class="tab-btn" data-filter="my-votes" id="tab-my-votes" hidden>我的投票紀錄</button>
+        <button type="button" id="toggle-create-btn" class="secondary btn-sm" hidden>＋ 發起新投票</button>
       </div>
-      <button type="button" id="toggle-create-btn" class="secondary btn-sm" hidden>＋ 發起新投票</button>
-    </div>
 
-    <!-- 投票列表容器 -->
-    <div id="polls-container">
-      <div class="empty-box">載入投票清單中…</div>
+      <!-- 投票列表容器 -->
+      <div id="polls-container">
+        <div class="empty-box">載入投票清單中…</div>
+      </div>
     </div>
   </main>
 

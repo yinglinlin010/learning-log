@@ -28,6 +28,7 @@
     addMoreOptBtn: $("add-more-opt-btn"),
     cancelCreateBtn: $("cancel-create-btn"),
     toggleCreateBtn: $("toggle-create-btn"),
+    appView: $("app-view"),
     pollsContainer: $("polls-container"),
     systemStatus: $("system-status"),
     tabAll: document.querySelector('.tab-btn[data-filter="all"]'),
@@ -107,6 +108,8 @@
     els.authStatusBar.replaceChildren();
     if (currentUser) {
       els.authPanel.hidden = true;
+      if (els.appView) els.appView.hidden = false;
+
       var badge = document.createElement("span");
       badge.className = "user-email-badge";
       badge.textContent = currentUser.email || "已登入";
@@ -121,17 +124,15 @@
       els.toggleCreateBtn.hidden = false;
       els.tabMyVotes.hidden = false;
     } else {
-      els.authPanel.hidden = false; // 未登入時直接呈現登入頁面
-      var loginBtn = document.createElement("button");
-      loginBtn.type = "button";
-      loginBtn.className = "btn-sm";
-      loginBtn.textContent = "請先登入";
-      loginBtn.addEventListener("click", function () {
-        els.authPanel.hidden = false;
-        els.authEmail.focus();
-      });
+      els.authPanel.hidden = false; // 未登入：強制只顯示登入註冊表單
+      if (els.appView) els.appView.hidden = true; // 隱藏投票內容，要求先登入
 
-      els.authStatusBar.append(loginBtn);
+      var hint = document.createElement("span");
+      hint.style.fontSize = "0.9rem";
+      hint.style.color = "#cde2dc";
+      hint.textContent = "請先登入帳號後進行投票";
+      els.authStatusBar.append(hint);
+
       els.toggleCreateBtn.hidden = true;
       els.tabMyVotes.hidden = true;
       if (currentFilter === "my-votes") {
