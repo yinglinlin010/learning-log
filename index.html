@@ -29,20 +29,18 @@
     </section>
 
     <!-- 身分驗證區塊（登入 / 註冊） -->
-    <section id="auth-panel" class="card" hidden>
+    <section id="auth-panel" class="card">
       <div class="card-header">
-        <h2 id="auth-title" class="card-title">會員登入 / 註冊</h2>
-        <button type="button" id="close-auth-btn" class="secondary btn-sm" aria-label="關閉">✕ 關閉</button>
+        <h2 id="auth-title" class="card-title">登入或註冊</h2>
       </div>
-      <p class="card-desc">依循資料庫 RLS 門禁規範：登入後每人每題嚴格限投一票，可隨時更換或撤回投票。</p>
       <form id="auth-form">
-        <label for="auth-email">電子郵件（Email）</label>
-        <input id="auth-email" type="email" autocomplete="email" required placeholder="your.name@example.com">
-        <label for="auth-password">練習用密碼（至少 6 碼，切勿使用重要密碼）</label>
+        <label for="auth-email">Email</label>
+        <input id="auth-email" type="email" autocomplete="email" required placeholder="例如：your.name@example.com">
+        <label for="auth-password">練習用密碼（至少 6 個字元；不要沿用其他帳號的密碼）</label>
         <input id="auth-password" type="password" autocomplete="current-password" minlength="6" required>
         <div class="form-row">
           <button type="submit" id="submit-login">登入</button>
-          <button type="button" id="submit-signup" class="secondary">註冊新帳號</button>
+          <button type="button" id="submit-signup" class="secondary">第一次來：註冊</button>
         </div>
       </form>
     </section>

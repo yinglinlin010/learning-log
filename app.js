@@ -106,6 +106,7 @@
   function renderAuthBar() {
     els.authStatusBar.replaceChildren();
     if (currentUser) {
+      els.authPanel.hidden = true;
       var badge = document.createElement("span");
       badge.className = "user-email-badge";
       badge.textContent = currentUser.email || "已登入";
@@ -120,10 +121,11 @@
       els.toggleCreateBtn.hidden = false;
       els.tabMyVotes.hidden = false;
     } else {
+      els.authPanel.hidden = false; // 未登入時直接呈現登入頁面
       var loginBtn = document.createElement("button");
       loginBtn.type = "button";
       loginBtn.className = "btn-sm";
-      loginBtn.textContent = "登入 / 註冊";
+      loginBtn.textContent = "請先登入";
       loginBtn.addEventListener("click", function () {
         els.authPanel.hidden = false;
         els.authEmail.focus();
@@ -512,7 +514,9 @@
     // 綁定事件監聽
     els.authForm.addEventListener("submit", handleSignIn);
     els.submitSignup.addEventListener("click", handleSignUp);
-    els.closeAuthBtn.addEventListener("click", function () { els.authPanel.hidden = true; });
+    if (els.closeAuthBtn) {
+      els.closeAuthBtn.addEventListener("click", function () { els.authPanel.hidden = true; });
+    }
 
     els.toggleCreateBtn.addEventListener("click", function () {
       els.createPollPanel.hidden = !els.createPollPanel.hidden;
